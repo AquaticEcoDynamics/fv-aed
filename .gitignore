@@ -1,0 +1,9 @@
+fv-source/binaries
+renv/*
+.Rprofile
+.DS_Store
+.*.swp
+*_fortran-compiler*.sh
+*_fortran-compiler*.exe
+*_fortran-compiler*.dmg
+vs_community.exe

@@ -1,0 +1,12 @@
+[submodule "fv-source/libaed-fv"]
+	path = fv-source/libaed-fv
+	url = https://github.com/AquaticEcoDynamics/libaed-fv.git
+[submodule "fv-source/libaed-water"]
+	path = fv-source/libaed-water
+	url = https://github.com/AquaticEcoDynamics/libaed-water.git
+[submodule "fv-source/libaed-benthic"]
+	path = fv-source/libaed-benthic
+	url = https://github.com/AquaticEcoDynamics/libaed-benthic.git
+[submodule "fv-source/libaed-demo"]
+	path = fv-source/libaed-demo
+	url = https://github.com/AquaticEcoDynamics/libaed-demo.git

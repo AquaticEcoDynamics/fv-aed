@@ -9,7 +9,7 @@
 
 <br>
 
-<a href="url"><img src="aed-icon2.png" align="right" width="50" ></a> FV-AED is the water quality model [AED](https://aquaticecodynamics.github.io/aed-science/index.html) ready for linking with the 3D finite volume hydrodynamic model TUFLOW-FV. 
+<a href="url"><img src="aed-icon2.png" align="right" width="50" ></a> FV-AED is the water quality model [AED](https://aquaticecodynamics.github.io/aed-science/index.html) compiled as a plugin ready for linking with the 3D finite volume hydrodynamic model *TUFLOW-FV*. 
 
 <br>
 

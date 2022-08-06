@@ -9,7 +9,7 @@
 
 <br>
 
-<a href="url"><img src="glm-source/admin/aed-icon2.png" align="right" width="50" ></a> FV-AED is the water quality model [AED](https://aquaticecodynamics.github.io/aed-science/index.html) ready for linking with the 3D finite volume hydrodynamic model TUFLOW-FV. 
+<a href="url"><img src="aed-icon2.png" align="right" width="50" ></a> FV-AED is the water quality model [AED](https://aquaticecodynamics.github.io/aed-science/index.html) ready for linking with the 3D finite volume hydrodynamic model TUFLOW-FV. 
 
 <br>
 
@@ -17,9 +17,9 @@
 
 The repository includes:
 
-- `binaries` : model pre-compiled executables for mac, linux and windows.
-- `fv-source` : model source code, including GLM and AED as linked sub-modules.
-- `fv-examples` : model example simulations, including all required input files.
+- `binaries` : model pre-compiled executables for linux and windows.
+- `fv-source` : model source code, including required AED libraries (libaed-fv, libaed-water and libaed-benthic) as linked sub-modules.
+- `fv-examples` : example simulations for running a TUFLOW-FV + AED simulation, including all required input files.
 - `workflows` : github workflows for automated compilation and testing.
 
 <br>
@@ -44,22 +44,22 @@ To access the full repository, including the model examples, the repository must
 
 ### Cloning the latest code
 ```
-git clone --recurse-submodules https://github.com/AquaticEcoDynamics/glm-aed.git
+git clone --recurse-submodules https://github.com/AquaticEcoDynamics/fv-aed.git
 ```
 
 ### Cloning a particular tag
 ```
-git clone --recurse-submodules -b v3.3.0 https://github.com/AquaticEcoDynamics/glm-aed.git
+git clone --recurse-submodules -b v2.2.1 https://github.com/AquaticEcoDynamics/fv-aed.git
 ```
 
 <br>
 
 ## Additional information
 
-See repository [Wiki](https://github.com/AquaticEcoDynamics/glm-aed/wiki) for additional information on getting started using GLM-AED, working with the repository, and updating or adding new example lakes.
+See repository [Wiki](https://github.com/AquaticEcoDynamics/fv-aed/wiki) for additional information on getting started using FV-AED, working with the repository, and updating or adding new example water-bodies.
 
 <br>
 
-[<img src="glm-source/admin/aed.png" alt="AED" width="100"/>](https://aquatic.science.uwa.edu.au)
+[<img src="aed.png" alt="AED" width="100"/>](https://aquatic.science.uwa.edu.au)
 
 

@@ -28,14 +28,18 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Checkout submodules
-        run: git submodule update --init --recursive
+        run: |
+           git submodule update --init --recursive
+           git config --global user.name "github-actions[bot]"
+           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+           git pull
 
       # Runs a single command using the runners shell
       - name: Getting packages
         run:  | 
-          sudo apt-get update -y
-          sudo apt-get install devscripts
-          sudo apt-get install debhelper
+           sudo apt-get update -y
+           sudo apt-get install devscripts
+           sudo apt-get install debhelper
 
       - name: Install compiler
         run: |
@@ -53,12 +57,12 @@ jobs:
 
       - name: update binaries and push to remote
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull
-          git add -A
-          git commit -m "Update Ubuntu 20.04 binaries"
-          git push
+           git config --global user.name "github-actions[bot]"
+           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+           git pull
+           git add -A
+           git commit -m "Update Ubuntu 20.04 binaries"
+           git push
 
   windows:
     # The type of runner that the job will run on
@@ -74,7 +78,10 @@ jobs:
 
       - name: Checkout submodules
         run: |
-          git submodule update --init --recursive
+           git submodule update --init --recursive
+           git config --global user.name "github-actions[bot]"
+           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+           git pull
 
       - name: Install compiler
         shell: bash
@@ -110,9 +117,9 @@ jobs:
 
       - name: update binaries and push to remote
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git pull
-          git add -A
-          git commit -m "Update Windows binaries"
-          git push
+           git config --global user.name "github-actions[bot]"
+           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+           git pull
+           git add -A
+           git commit -m "Update Windows binaries"
+           git push

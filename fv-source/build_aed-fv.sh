@@ -151,7 +151,9 @@ if [ "${NO_DEV}" != "true" ] ; then
 fi
 
 echo build tfv_wq
-/bin/rm ${AEDFVDIR}/obj/aed_external.o
+if [ -f ${AEDFVDIR}/obj/aed_external.o ] ; then
+  /bin/rm ${AEDFVDIR}/obj/aed_external.o
+fi
 ${MAKE} -C ${AEDFVDIR} ${PARAMS} || exit 1
 
 #ISODATE=`date +%Y%m%d`

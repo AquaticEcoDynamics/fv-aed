@@ -26,10 +26,17 @@ The repository includes:
 
 ## Citing this code
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6363500.svg)](https://doi.org/10.5281/zenodo.6363500) (BADGE PENDING RELEASE)
+[![DOI](https://zenodo.org/badge/520823025.svg)](https://zenodo.org/badge/latestdoi/520823025)
 
-Pending Authors (Pending year). FV - Aquatic Ecosystem Dynamics (FV-AED) V XXXX. [Software]. Zenodo. (Pending Zenado DOI)
+Users may need to cite the AED model in general, or a specific model code package/bundle/version.
 
+Citing a specific code bundle, please use the appropriate DOI, eg.:
+
+*Hipsey, M.R., Boon, C., Paraska, D., Bruce, L. and Huang, P., (2022). AquaticEcoDynamics/fv-aed: v2.2.1 (v2.2.1). Zenodo. https://doi.org/10.5281/zenodo.7047676.*
+
+Citing the AED model:
+
+*Hipsey, M.R., ed. (2022) Modelling Aquatic Eco-Dynamics: Overview of the AED modular simulation platform. Zenodo. https://doi.org/10.5281/zenodo.6516222.*
 <br>
 
 ## Getting the latest pre-compiled version

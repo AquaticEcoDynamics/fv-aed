@@ -42,7 +42,7 @@ Citing the AED model:
 
 ## Getting the latest pre-compiled version
 
-For users who only need access to a model executable plugin, the executable for your chosen platform can be downloaded without getting the full repository. Simply navigate to the binaries/os folder, click on the relevant file (e.g., `tuflow_external_wq_2.2.1.zip`) and click the "*download*" button on the right.
+For users who only need access to a model executable plugin, the executable for your chosen platform can be downloaded without getting the full repository. Simply navigate to the binaries/os folder, click on the relevant file (e.g., `tuflow_external_wq_2.2.1.zip`) and click the "*download*" button on the right. 
 
 <br>
 
@@ -59,6 +59,12 @@ git clone --recurse-submodules https://github.com/AquaticEcoDynamics/fv-aed.git
 ```
 git clone --recurse-submodules -b v2.2.1 https://github.com/AquaticEcoDynamics/fv-aed.git
 ```
+
+<br>
+
+## Getting hold of older versions
+
+Releases from 2022 are available by sorting through the releases section. For users seeking older bundles of the code (e.g., for compatibility with prior TUFLOW-FV versions), please visit the AED [releases](https://github.com/AquaticEcoDynamics/releases) repository. 
 
 <br>
 

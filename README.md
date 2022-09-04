@@ -37,6 +37,7 @@ Citing a specific code bundle, please use the appropriate DOI, eg.:
 Citing the AED model:
 
 *Hipsey, M.R., ed. (2022) Modelling Aquatic Eco-Dynamics: Overview of the AED modular simulation platform. Zenodo. https://doi.org/10.5281/zenodo.6516222.*
+
 <br>
 
 ## Getting the latest pre-compiled version

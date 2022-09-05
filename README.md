@@ -26,15 +26,23 @@ The repository includes:
 
 ## Citing this code
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6363500.svg)](https://doi.org/10.5281/zenodo.6363500) (BADGE PENDING RELEASE)
+[![DOI](https://zenodo.org/badge/520823025.svg)](https://zenodo.org/badge/latestdoi/520823025)
 
-Pending Authors (Pending year). FV - Aquatic Ecosystem Dynamics (FV-AED) V XXXX. [Software]. Zenodo. (Pending Zenado DOI)
+Users may need to cite the AED model in general, or a specific model code package/bundle/version.
+
+Citing a specific code bundle, please use the appropriate DOI, eg.:
+
+*Hipsey, M.R., Boon, C., Paraska, D., Bruce, L. and Huang, P., (2022). AquaticEcoDynamics/fv-aed: v2.2.1 (v2.2.1). Zenodo. https://doi.org/10.5281/zenodo.7047676.*
+
+Citing the AED model:
+
+*Hipsey, M.R., ed. (2022) Modelling Aquatic Eco-Dynamics: Overview of the AED modular simulation platform. Zenodo. https://doi.org/10.5281/zenodo.6516222.*
 
 <br>
 
 ## Getting the latest pre-compiled version
 
-For users who only need access to a model executable plugin, the executable for your chosen platform can be downloaded without getting the full repository. Simply navigate to the binaries/os folder, click on the relevant file (e.g., `tuflow_external_wq_2.2.1.zip`) and click the "*download*" button on the right.
+For users who only need access to a model executable plugin, the executable for your chosen platform can be downloaded without getting the full repository. Simply navigate to the binaries/os folder, click on the relevant file (e.g., `tuflow_external_wq_2.2.1.zip`) and click the "*download*" button on the right. 
 
 <br>
 
@@ -51,6 +59,12 @@ git clone --recurse-submodules https://github.com/AquaticEcoDynamics/fv-aed.git
 ```
 git clone --recurse-submodules -b v2.2.1 https://github.com/AquaticEcoDynamics/fv-aed.git
 ```
+
+<br>
+
+## Getting hold of older versions
+
+Releases from 2022 are available by sorting through the releases section. For users seeking older bundles of the code (e.g., for compatibility with prior TUFLOW-FV versions), please visit the AED [releases](https://github.com/AquaticEcoDynamics/releases) repository. 
 
 <br>
 

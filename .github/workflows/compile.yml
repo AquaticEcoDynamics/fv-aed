@@ -43,9 +43,9 @@ jobs:
 
       - name: Install compiler
         run: |
-           curl -SL --output l_fortran-compiler_p_2022.1.0.134_offline.sh  https://registrationcenter-download.intel.com/akdlm/irc_nas/18703/l_fortran-compiler_p_2022.1.0.134_offline.sh
+           curl -SL --output l_fortran-compiler_p_2023.0.0.25394_offline.sh https://registrationcenter-download.intel.com/akdlm/irc_nas/19105/l_fortran-compiler_p_2023.0.0.25394_offline.sh
            mkdir tmp
-           /bin/sh l_fortran-compiler_p_2022.1.0.134_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
+           /bin/sh l_fortran-compiler_p_2023.0.0.25394_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
 
       # Runs a set of commands using the runners shell
       - name: compile libaed-fv
@@ -91,9 +91,9 @@ jobs:
            curl -SL --output vs_community.exe https://aka.ms/vs/16/release/vs_community.exe
            ./vs_community.exe --quiet --norestart --wait --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended
            #
-           curl -SL --output w_fortran-compiler_p_2022.1.0.139_offline.exe https://registrationcenter-download.intel.com/akdlm/irc_nas/18716/w_fortran-compiler_p_2022.1.0.139_offline.exe
+           curl -SL --output w_fortran-compiler_p_2023.0.0.25579_offline.exe https://registrationcenter-download.intel.com/akdlm/irc_nas/19107/w_fortran-compiler_p_2023.0.0.25579_offline.exe
            mkdir tmp
-           ./w_fortran-compiler_p_2022.1.0.139_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
+           ./w_fortran-compiler_p_2023.0.0.25579_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
 
       - name: compile libaed-fv
         shell: bash

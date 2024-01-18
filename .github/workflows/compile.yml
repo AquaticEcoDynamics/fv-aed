@@ -99,10 +99,10 @@ jobs:
         shell: bash
         run: |
            # cd $GITHUB_WORKSPACE/fv-source
-           cd $GITHUB_WORKSPACE
-           cmd.exe /c 'fv-source\build_aed-fv.bat'
-           # cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win
-           # cmd.exe /c build_fv.bat
+           # cd $GITHUB_WORKSPACE
+           # cmd.exe /c 'fv-source\build_aed-fv.bat'
+           cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win
+           cmd.exe '/c build_fv.bat'
            echo '========================='
            cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win/x64-Release
            mkdir -p tuflowfv_external_wq

@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Compile Mac, Ubuntu, Windows
+name: Compile Ubuntu, Windows
 
 # Controls when the workflow will run
 on:
@@ -46,6 +46,7 @@ jobs:
            curl -SL --output l_fortran-compiler_p_2023.0.0.25394_offline.sh https://registrationcenter-download.intel.com/akdlm/irc_nas/19105/l_fortran-compiler_p_2023.0.0.25394_offline.sh
            mkdir tmp
            /bin/sh l_fortran-compiler_p_2023.0.0.25394_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
+           cp l_fortran-compiler_p_2023.0.0.25394_offline.sh $GITHUB_WORKSPACE/binaries/windows
 
       # Runs a set of commands using the runners shell
       - name: compile libaed-fv
@@ -94,6 +95,7 @@ jobs:
            curl -SL --ssl-no-revoke --output w_fortran-compiler_p_2023.0.0.25579_offline.exe https://registrationcenter-download.intel.com/akdlm/irc_nas/19107/w_fortran-compiler_p_2023.0.0.25579_offline.exe
            mkdir tmp
            ./w_fortran-compiler_p_2023.0.0.25579_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
+           cp w_fortran-compiler_p_2023.0.0.25579_offline.exe $GITHUB_WORKSPACE/binaries/windows
 
       - name: compile libaed-fv
         shell: bash
@@ -102,12 +104,12 @@ jobs:
            # cd $GITHUB_WORKSPACE
            # cmd.exe /c 'fv-source\build_aed-fv.bat'
            cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win
-           cmd.exe '/c build_fv.bat'
+           #cmd.exe '/c build_fv.bat'
            echo '========================='
            cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win/x64-Release
            mkdir -p tuflowfv_external_wq
            export VERSION=`grep FV_AED_VERS ../../src/fv_aed.F90 | grep define | cut -f2 -d\"`
-           mv tuflowfv_external_wq.??? tuflowfv_external_wq
+           #mv tuflowfv_external_wq.??? tuflowfv_external_wq
            powershell -Command "Compress-Archive -LiteralPath tuflowfv_external_wq -DestinationPath tuflowfv_external_wq_$VERSION.zip"
            echo 
            if [ ! -d $GITHUB_WORKSPACE/binaries/windows ] ; then

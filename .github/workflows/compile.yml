@@ -46,7 +46,6 @@ jobs:
            curl -SL --output l_fortran-compiler_p_2023.0.0.25394_offline.sh https://registrationcenter-download.intel.com/akdlm/irc_nas/19105/l_fortran-compiler_p_2023.0.0.25394_offline.sh
            mkdir tmp
            /bin/sh l_fortran-compiler_p_2023.0.0.25394_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
-           cp l_fortran-compiler_p_2023.0.0.25394_offline.sh $GITHUB_WORKSPACE/binaries/windows
 
       # Runs a set of commands using the runners shell
       - name: compile libaed-fv
@@ -104,18 +103,18 @@ jobs:
            # cd $GITHUB_WORKSPACE
            # cmd.exe /c 'fv-source\build_aed-fv.bat'
            cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win
-           #cmd.exe '/c build_fv.bat'
+           # cmd.exe '/c build_fv.bat'
            echo '========================='
-           cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win/x64-Release
-           mkdir -p tuflowfv_external_wq
+           # cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win/x64-Release
+           # mkdir -p tuflowfv_external_wq
            export VERSION=`grep FV_AED_VERS ../../src/fv_aed.F90 | grep define | cut -f2 -d\"`
-           #mv tuflowfv_external_wq.??? tuflowfv_external_wq
-           powershell -Command "Compress-Archive -LiteralPath tuflowfv_external_wq -DestinationPath tuflowfv_external_wq_$VERSION.zip"
+           # mv tuflowfv_external_wq.??? tuflowfv_external_wq
+           # powershell -Command "Compress-Archive -LiteralPath tuflowfv_external_wq -DestinationPath tuflowfv_external_wq_$VERSION.zip"
            echo 
            if [ ! -d $GITHUB_WORKSPACE/binaries/windows ] ; then
              mkdir -p $GITHUB_WORKSPACE/binaries/windows
            fi
-           cp tuflowfv_external_wq_$VERSION.zip $GITHUB_WORKSPACE/binaries/windows
+           # cp tuflowfv_external_wq_$VERSION.zip $GITHUB_WORKSPACE/binaries/windows
 
       - name: update binaries and push to remote
         run: |

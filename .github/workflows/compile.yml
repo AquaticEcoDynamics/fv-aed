@@ -16,9 +16,9 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains three jobs called "macOS","Ubuntu", and "windows"
-  ubuntu20:
+  ubuntu22:
     # The type of runner that the job will run on
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -52,8 +52,8 @@ jobs:
         run: | 
            cd $GITHUB_WORKSPACE/fv-source
            ./build_aed-fv.sh
-           mkdir -p $GITHUB_WORKSPACE/binaries/ubuntu/20.04
-           cp -r $GITHUB_WORKSPACE/fv-source/binaries/ubuntu/20.04/* $GITHUB_WORKSPACE/binaries/ubuntu/20.04/.
+           mkdir -p $GITHUB_WORKSPACE/binaries/ubuntu/22.04
+           cp -r $GITHUB_WORKSPACE/fv-source/binaries/ubuntu/22.04/* $GITHUB_WORKSPACE/binaries/ubuntu/22.04/.
 
       - name: update binaries and push to remote
         run: |
@@ -61,7 +61,7 @@ jobs:
            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
            git pull
            git add -A
-           git commit -m "Update Ubuntu 20.04 binaries"
+           git commit -m "Update Ubuntu 22.04 binaries"
            git push
 
   windows:
@@ -87,12 +87,15 @@ jobs:
         shell: bash
         run: |
            cd $GITHUB_WORKSPACE
+           if [ ! -d $GITHUB_WORKSPACE/binaries/windows ] ; then
+             mkdir -p $GITHUB_WORKSPACE/binaries/windows
+           fi
            # Although VS-2019 is already installed it's missing some parts needed, so we do it anyway
            curl -SL --output vs_community.exe https://aka.ms/vs/16/release/vs_community.exe
            ./vs_community.exe --quiet --norestart --wait --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended
            #
            curl -SL --ssl-no-revoke --output w_fortran-compiler_p_2023.0.0.25579_offline.exe https://registrationcenter-download.intel.com/akdlm/irc_nas/19107/w_fortran-compiler_p_2023.0.0.25579_offline.exe
-           cp w_fortran-compiler_p_2023.0.0.25579_offline.exe $GITHUB_WORKSPACE/binaries
+           cp w_fortran-compiler_p_2023.0.0.25579_offline.exe $GITHUB_WORKSPACE/binaries/windows
            mkdir tmp
            ./w_fortran-compiler_p_2023.0.0.25579_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
 
@@ -118,6 +121,7 @@ jobs:
 
       - name: update binaries and push to remote
         run: |
+           ls binaries/windows
            git config --global user.name "github-actions[bot]"
            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
            git pull

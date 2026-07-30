@@ -16,9 +16,9 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains three jobs called "macOS","Ubuntu", and "windows"
-  ubuntu22:
+  ubuntu24:
     # The type of runner that the job will run on
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,11 +43,9 @@ jobs:
 
       - name: Install compiler
         run: |
-         # curl -SL --output l_fortran-compiler_p_2023.0.0.25394_offline.sh https://registrationcenter-download.intel.com/akdlm/irc_nas/19105/l_fortran-compiler_p_2023.0.0.25394_offline.sh
-         curl -SL --output l_fortran-compiler_p_2021.1.2.62.sh https://registrationcenter-download.intel.com/akdlm/irc_nas/17508/l_fortran-compiler_p_2021.1.2.62.sh
+         curl -SL --output intel-fortran-compiler-2026.1.1.19_offline.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/09a1aab3-8441-4a4e-a243-1c1c8e15598c/intel-fortran-compiler-2026.1.1.19_offline.sh
            mkdir tmp
-         # /bin/sh l_fortran-compiler_p_2023.0.0.25394_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
-           /bin/sh l_fortran-compiler_p_2021.1.2.62.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
+           /bin/sh intel-fortran-compiler-2026.1.1.19_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
 
       # Runs a set of commands using the runners shell
       - name: compile libaed-fv
@@ -93,9 +91,9 @@ jobs:
            curl -SL --output vs_community.exe https://aka.ms/vs/16/release/vs_community.exe
            ./vs_community.exe --quiet --norestart --wait --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended
            #
-           curl -SL --ssl-no-revoke --output w_fortran-compiler_p_2023.0.0.25579_offline.exe https://registrationcenter-download.intel.com/akdlm/irc_nas/19107/w_fortran-compiler_p_2023.0.0.25579_offline.exe
+           curl -SL --output intel-fortran-compiler-2026.1.1.20_offline.exe intel-fortran-compiler-2026.1.1.20_offline.exe https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a43777b7-be5a-4fb6-97f9-bf4ae49eeb33/intel-fortran-compiler-2026.1.1.20_offline.exe
            mkdir tmp
-           ./w_fortran-compiler_p_2023.0.0.25579_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
+           ./intel-fortran-compiler-2026.1.1.20_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
 
       - name: compile libaed-fv
         shell: bash

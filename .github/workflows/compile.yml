@@ -15,7 +15,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains three jobs called "macOS","Ubuntu", and "windows"
+  # This workflow contains two jobs called "ubuntu24", and "windows"
   ubuntu24:
     # The type of runner that the job will run on
     runs-on: ubuntu-24.04
@@ -52,8 +52,8 @@ jobs:
         run: | 
            cd $GITHUB_WORKSPACE/fv-source
            ./build_aed-fv.sh
-           mkdir -p $GITHUB_WORKSPACE/binaries/ubuntu/22.04
-           cp -r $GITHUB_WORKSPACE/fv-source/binaries/ubuntu/22.04/* $GITHUB_WORKSPACE/binaries/ubuntu/22.04/.
+           mkdir -p $GITHUB_WORKSPACE/binaries/ubuntu/24.04
+           cp -r $GITHUB_WORKSPACE/fv-source/binaries/ubuntu/24.04/* $GITHUB_WORKSPACE/binaries/ubuntu/24.04/.
 
       - name: update binaries and push to remote
         run: |
@@ -61,7 +61,7 @@ jobs:
            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
            git pull
            git add -A
-           git commit -m "Update Ubuntu 22.04 binaries"
+           git commit -m "Update Ubuntu 24.04 binaries"
            git push
 
   windows:
@@ -91,7 +91,7 @@ jobs:
            curl -SL --output vs_community.exe https://aka.ms/vs/16/release/vs_community.exe
            ./vs_community.exe --quiet --norestart --wait --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended
            #
-           curl -SL --output intel-fortran-compiler-2026.1.1.20_offline.exe intel-fortran-compiler-2026.1.1.20_offline.exe https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a43777b7-be5a-4fb6-97f9-bf4ae49eeb33/intel-fortran-compiler-2026.1.1.20_offline.exe
+           curl -SL --output intel-fortran-compiler-2026.1.1.20_offline.exe https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a43777b7-be5a-4fb6-97f9-bf4ae49eeb33/intel-fortran-compiler-2026.1.1.20_offline.exe
            mkdir tmp
            ./intel-fortran-compiler-2026.1.1.20_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
 

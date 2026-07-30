@@ -22,7 +22,7 @@ if [ "$OSTYPE" = "FreeBSD" ] ; then
   export FC=flang
   export CC=clang
 else
-  export FC=ifort
+  export FC=ifx
 fi
 
 while [ $# -gt 0 ] ; do
@@ -67,15 +67,15 @@ if [ "$OSTYPE" = "FreeBSD" ] ; then
 fi
 
 if [ "$FC" = "" ] ; then
-  export FC=ifort
+  export FC=ifx
 fi
 
-if [ "$FC" = "ifort" ] ; then
+if [ "$FC" = "ifx" ] ; then
   if [ "$OSTYPE" = "Msys" ] ; then
     export PATH="$PATH:/c/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/bin/intel64"
   else
     export start_sh="$(ps -p "$$" -o  command= | awk '{print $1}')" ;
-    # ifort config scripts wont work with /bin/sh
+    # ifx config scripts wont work with /bin/sh
     # so we restart using bash
     if [ "$start_sh" = "/bin/sh" ] ; then
       /bin/bash $0
@@ -90,9 +90,9 @@ if [ "$FC" = "ifort" ] ; then
         . /opt/intel/bin/compilervars.sh intel64
       fi
     fi
-    which ifort > /dev/null 2>&1
+    which ifx > /dev/null 2>&1
     if [ $? != 0 ] ; then
-       echo ifort compiler requested, but not found
+       echo ifx compiler requested, but not found
        exit 1
     fi
   fi

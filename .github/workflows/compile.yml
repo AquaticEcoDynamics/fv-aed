@@ -66,9 +66,9 @@ jobs:
            git commit -m "Update Ubuntu 24.04 binaries"
            git push
 
-# windows:
-#   # The type of runner that the job will run on
-#   runs-on: windows-latest
+  windows:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}

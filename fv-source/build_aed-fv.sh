@@ -82,10 +82,14 @@ if [ "$FC" = "ifx" ] ; then
       exit $?
     fi
 
+    ls /opt
+    ls /opt/intel
+
     # different releases put setup script in different places
     if [ -x /opt/intel/setvars.sh ] ; then
       . /opt/intel/setvars.sh
     elif [ -d /opt/intel/oneapi ] ; then
+      ls /opt/intel/oneapi/
       . /opt/intel/oneapi/setvars.sh
     elif [ -d /opt/intel/bin ] ; then
       . /opt/intel/bin/compilervars.sh intel64

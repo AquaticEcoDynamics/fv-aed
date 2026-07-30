@@ -64,64 +64,64 @@ jobs:
            git commit -m "Update Ubuntu 24.04 binaries"
            git push
 
-  windows:
-    # The type of runner that the job will run on
-    runs-on: windows-latest
+# windows:
+#   # The type of runner that the job will run on
+#   runs-on: windows-latest
 
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+#   env:
+#     GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+#   # Steps represent a sequence of tasks that will be executed as part of the job
+#   steps:
+#     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#     - uses: actions/checkout@v4
 
-      - name: Checkout submodules
-        run: |
-           git submodule update --init --recursive
-           git config --global user.name "github-actions[bot]"
-           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-           git pull
+#     - name: Checkout submodules
+#       run: |
+#          git submodule update --init --recursive
+#          git config --global user.name "github-actions[bot]"
+#          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#          git pull
 
-      - name: Install compiler
-        shell: bash
-        run: |
-           cd $GITHUB_WORKSPACE
-           # Although VS-2019 is already installed it's missing some parts needed, so we do it anyway
-           curl -SL --output vs_community.exe https://aka.ms/vs/16/release/vs_community.exe
-           ./vs_community.exe --quiet --norestart --wait --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended
-           #
-           curl -SL --output intel-fortran-compiler-2026.1.1.20_offline.exe https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a43777b7-be5a-4fb6-97f9-bf4ae49eeb33/intel-fortran-compiler-2026.1.1.20_offline.exe
-           mkdir tmp
-           ./intel-fortran-compiler-2026.1.1.20_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
-           rm intel-fortran-compiler-2026.1.1.20_offline.exe
+#     - name: Install compiler
+#       shell: bash
+#       run: |
+#          cd $GITHUB_WORKSPACE
+#          # Although VS-2019 is already installed it's missing some parts needed, so we do it anyway
+#          curl -SL --output vs_community.exe https://aka.ms/vs/16/release/vs_community.exe
+#          ./vs_community.exe --quiet --norestart --wait --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended
+#          #
+#          curl -SL --output intel-fortran-compiler-2026.1.1.20_offline.exe https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a43777b7-be5a-4fb6-97f9-bf4ae49eeb33/intel-fortran-compiler-2026.1.1.20_offline.exe
+#          mkdir tmp
+#          ./intel-fortran-compiler-2026.1.1.20_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
+#          rm intel-fortran-compiler-2026.1.1.20_offline.exe
 
-      - name: compile libaed-fv
-        shell: bash
-        run: |
-           # cd $GITHUB_WORKSPACE/fv-source
-           # cd $GITHUB_WORKSPACE
-           # cmd.exe /c 'fv-source\build_aed-fv.bat'
-           cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win
-           cmd.exe '/c build_fv.bat'
-           echo '========================='
-           cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win/x64-Release
-           mkdir -p tuflowfv_external_wq
-           export VERSION=`grep FV_AED_VERS ../../src/fv_aed.F90 | grep define | cut -f2 -d\"`
-           mv tuflowfv_external_wq.??? tuflowfv_external_wq
-           powershell -Command "Compress-Archive -LiteralPath tuflowfv_external_wq -DestinationPath tuflowfv_external_wq_$VERSION.zip"
-           echo 
-           if [ ! -d $GITHUB_WORKSPACE/binaries/windows ] ; then
-             mkdir -p $GITHUB_WORKSPACE/binaries/windows
-           fi
-           cp tuflowfv_external_wq_$VERSION.zip $GITHUB_WORKSPACE/binaries/windows
+#     - name: compile libaed-fv
+#       shell: bash
+#       run: |
+#          # cd $GITHUB_WORKSPACE/fv-source
+#          # cd $GITHUB_WORKSPACE
+#          # cmd.exe /c 'fv-source\build_aed-fv.bat'
+#          cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win
+#          cmd.exe '/c build_fv.bat'
+#          echo '========================='
+#          cd $GITHUB_WORKSPACE/fv-source/libaed-fv/win/x64-Release
+#          mkdir -p tuflowfv_external_wq
+#          export VERSION=`grep FV_AED_VERS ../../src/fv_aed.F90 | grep define | cut -f2 -d\"`
+#          mv tuflowfv_external_wq.??? tuflowfv_external_wq
+#          powershell -Command "Compress-Archive -LiteralPath tuflowfv_external_wq -DestinationPath tuflowfv_external_wq_$VERSION.zip"
+#          echo 
+#          if [ ! -d $GITHUB_WORKSPACE/binaries/windows ] ; then
+#            mkdir -p $GITHUB_WORKSPACE/binaries/windows
+#          fi
+#          cp tuflowfv_external_wq_$VERSION.zip $GITHUB_WORKSPACE/binaries/windows
 
-      - name: update binaries and push to remote
-        run: |
-           ls binaries/windows
-           git config --global user.name "github-actions[bot]"
-           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-           git pull
-           git add -A
-           git commit -m "Update Windows binaries"
-           git push
+#     - name: update binaries and push to remote
+#       run: |
+#          ls binaries/windows
+#          git config --global user.name "github-actions[bot]"
+#          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#          git pull
+#          git add -A
+#          git commit -m "Update Windows binaries"
+#          git push

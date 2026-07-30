@@ -94,7 +94,7 @@ jobs:
            curl -SL --output intel-fortran-compiler-2026.1.1.20_offline.exe https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a43777b7-be5a-4fb6-97f9-bf4ae49eeb33/intel-fortran-compiler-2026.1.1.20_offline.exe
            mkdir tmp
            ./intel-fortran-compiler-2026.1.1.20_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
-           del intel-fortran-compiler-2026.1.1.20_offline.exe
+           rm intel-fortran-compiler-2026.1.1.20_offline.exe
 
       - name: compile libaed-fv
         shell: bash

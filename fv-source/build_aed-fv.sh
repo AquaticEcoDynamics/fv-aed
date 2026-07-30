@@ -81,18 +81,19 @@ if [ "$FC" = "ifx" ] ; then
       /bin/bash $0
       exit $?
     fi
-    if [ -d /opt/intel ] ; then
-      if [ -x /opt/intel/setvars.sh ] ; then
-        . /opt/intel/setvars.sh
-      elif [ -x /opt/intel/oneapi/setvars.sh ] ; then
-        . /opt/intel/oneapi/setvars.sh
-      elif [ -d /opt/intel/bin ] ; then
-        . /opt/intel/bin/compilervars.sh intel64
-      fi
+
+    # different releases put setup script in different places
+    if [ -x /opt/intel/setvars.sh ] ; then
+      . /opt/intel/setvars.sh
+    elif [ -d /opt/intel/oneapi ] ; then
+      . /opt/intel/oneapi/setvars.sh
+    elif [ -d /opt/intel/bin ] ; then
+      . /opt/intel/bin/compilervars.sh intel64
     fi
-    which ifx > /dev/null 2>&1
+
+    which ${FC} > /dev/null 2>&1
     if [ $? != 0 ] ; then
-       echo ifx compiler requested, but not found
+       echo ${FC} compiler requested, but not found
        exit 1
     fi
   fi

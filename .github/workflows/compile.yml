@@ -45,6 +45,7 @@ jobs:
         run: |
          curl -SL --output intel-fortran-compiler-2026.1.1.19_offline.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/09a1aab3-8441-4a4e-a243-1c1c8e15598c/intel-fortran-compiler-2026.1.1.19_offline.sh
            mkdir tmp
+           mkdir -p /opt/intel
            /bin/sh intel-fortran-compiler-2026.1.1.19_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
 
       # Runs a set of commands using the runners shell

@@ -46,7 +46,8 @@ jobs:
          curl -SL --output intel-fortran-compiler-2026.1.1.19_offline.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/09a1aab3-8441-4a4e-a243-1c1c8e15598c/intel-fortran-compiler-2026.1.1.19_offline.sh
            mkdir tmp
            mkdir -p /opt/intel
-           /bin/sh intel-fortran-compiler-2026.1.1.19_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel --eula accept
+           /bin/sh intel-fortran-compiler-2026.1.1.19_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel/oneapi --eula accept
+           # remove the very big installer
            rm -rf tmp intel-fortran-compiler-2026.1.1.19_offline.sh
 
       # Runs a set of commands using the runners shell
@@ -96,7 +97,8 @@ jobs:
            curl -SL --output intel-fortran-compiler-2026.1.1.20_offline.exe https://registrationcenter-download.intel.com/akdlm/IRC_NAS/a43777b7-be5a-4fb6-97f9-bf4ae49eeb33/intel-fortran-compiler-2026.1.1.20_offline.exe
            mkdir tmp
            ./intel-fortran-compiler-2026.1.1.20_offline.exe -s -f tmp -a --silent --cli --action install --eula accept
-           rm intel-fortran-compiler-2026.1.1.20_offline.exe
+           # remove the very big installer
+           rm -rf tmp intel-fortran-compiler-2026.1.1.20_offline.exe
 
       - name: compile libaed-fv
         shell: bash

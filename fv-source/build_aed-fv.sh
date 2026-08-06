@@ -216,6 +216,7 @@ if [ "$EXTERNAL_LIBS" = "shared" ] ; then
     if [ -d debian/libaed-tfv ] ; then
       rm -r debian/libaed-tfv
     fi
+    sed -i -e 's/Maintainer: Aquatic EcoDynamics Group/Maintainer: AED <cwss.aed@uwa.edu.au>/' debian/control
     fakeroot make -f debian/rules binary || exit 1
     cd ${CWD}
   fi

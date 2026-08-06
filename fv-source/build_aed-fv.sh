@@ -191,6 +191,7 @@ cd ${CURDIR}/win
 ${CURDIR}/vers.sh $VERSION
 if [ "$OSTYPE" = "Linux" ] ; then
   cd ${CURDIR}
+  sed -i -e 's/Maintainer: Aquatic EcoDynamics Group/Maintainer: AED <cwss.aed@uwa.edu.au>/' debian/control
   VERSDEB=`head -1 debian/changelog | cut -f2 -d\( | cut -f1 -d-`
   echo debian version $VERSDEB
   if [ "$VERSION" != "$VERSDEB" ] ; then
@@ -216,7 +217,6 @@ if [ "$EXTERNAL_LIBS" = "shared" ] ; then
     if [ -d debian/libaed-tfv ] ; then
       rm -r debian/libaed-tfv
     fi
-    sed -i -e 's/Maintainer: Aquatic EcoDynamics Group/Maintainer: AED <cwss.aed@uwa.edu.au>/' debian/control
     fakeroot make -f debian/rules binary || exit 1
     cd ${CWD}
   fi

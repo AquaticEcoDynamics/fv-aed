@@ -1,13 +1,74 @@
 #!/bin/sh
 
+# CURDIR should be the directory of the project we are building
+export CURDIR=`pwd`/libaed-fv
+# CWD should be the tools directory in which CURDIR lives
+export CWD=`dirname ${CURDIR}`
+
 export SINGLE=false
 export PRECISION=1
 export PLOTS=false
 export EXTERNAL_LIBS=shared
 export DEBUG=false
+export WITH_AED=true
+export WITH_AED_PLUS=false
+export WITH_MPI=false
+export WITH_CHECKS=false
 
 export LICENSE=0
 
+ARGS=""
+while [ $# -gt 0 ] ; do
+  ARGS="$ARGS $1"
+  case $1 in
+    --debug)
+      export DEBUG=true
+      export WITH_CHECKS=true
+      ;;
+    --static)
+      export EXTERNAL_LIBS=static
+      ;;
+    --single)
+      export SINGLE=true
+      ;;
+    --with-checks)
+      export WITH_CHECKS=true
+      ;;
+    --with-aed-plus)
+      export WITH_AED_PLUS=true
+      ;;
+    --without-aed-plus)
+      export WITH_AED_PLUS=false
+      ;;
+    --ifx)
+      export FC=ifx
+      ;;
+    --help)
+      echo "build_aed-fv accepts the following flags:"
+      echo "  --debug            : build with debugging symbols"
+      echo "  --with-checks      : add compiler flag to check array bounds"
+      echo "  --ifx              : use the newer intel fortran compiler"
+      echo
+      echo "  --with-aed-plus    : build with aed and aed-plus enabled"
+      echo "  --without-aed-plus : build without aed and aed-plus enabled"
+      echo "  --with-lib         : build library (libglm) as well"
+      echo "  --without-lib      : dont build libglm (default)"
+      echo
+      echo "  --single           : build single precision version (obsolete)"
+      echo "  --static           : build static library instead (obsolete)"
+      echo
+
+      exit 0
+      ;;
+    *)
+      echo "Unknown option \"$1\""
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+export OSTYPE=`uname -s`
 case `uname` in
   "Darwin"|"Linux"|"FreeBSD")
     export OSTYPE=`uname -s`
@@ -17,174 +78,127 @@ case `uname` in
     ;;
 esac
 
-export CC=gcc
-if [ "$OSTYPE" = "FreeBSD" ] ; then
-  export FC=flang
-  export CC=clang
-else
-  export FC=ifx
+if [ "$OSTYPE" = "Msys" ] ; then
+  #=============================== Windows build ===============================
+  export VERSION=`grep FV_AED_VERS ${CURDIR}/src/fv_aed.F90 | grep define | cut -f2 -d\"`
+  if [ "$VERSION" = "" ] ; then
+    export VERSION=`grep FV_AED_API_VERS ${CURDIR}/src/fv_aed.F90 | head -1 | cut -f2 -d\"`
+  fi
+  cd ${CURDIR}/win
+  ../vers.sh $VERSION
+
+  if [ -d x64-Release/tuflowfv_external_wq ] ; then
+    rm -rf x64-Release/tuflowfv_external_wq
+  fi
+  if [ -d x64-Release/tuflowfv_external_wq_$VERSION ] ; then
+    rm -rf x64-Release/tuflowfv_external_wq_$VERSION
+  fi
+  if [ -f x64-Release/tuflowfv_external_wq_$VERSION.zip ] ; then
+    rm -f x64-Release/tuflowfv_external_wq_$VERSION.zip
+  fi
+
+  if [ "$WITH_AED_PLUS" = "true" ] ; then
+    cmd.exe '/c build_fv+.bat'
+  else
+    cmd.exe '/c build_fv.bat'
+  fi
+  if [ $? -ne 0 ] ; then
+    echo errors in build
+    exit 1
+  fi
+
+  cd x64-Release
+  mkdir -p tuflowfv_external_wq_$VERSION
+  mv tuflowfv_external_wq.??? tuflowfv_external_wq_$VERSION
+  if [ "$WITH_AED_PLUS" = "true" ] ; then
+    powershell -Command "Compress-Archive -LiteralPath tuflowfv_external_wq_$VERSION -DestinationPath tuflowfv_external_wq+_$VERSION.zip"
+  else
+    powershell -Command "Compress-Archive -LiteralPath tuflowfv_external_wq_$VERSION -DestinationPath tuflowfv_external_wq_$VERSION.zip"
+  fi
+  if [ $? -ne 0 ] ; then
+    echo error building zipfile
+    exit 1
+  fi
+
+  if [ ! -d ${CWD}/binaries/windows ] ; then
+    mkdir -p ${CWD}/binaries/windows
+  fi
+
+  if [ "$WITH_AED_PLUS" = "true" ] ; then
+    cp tuflowfv_external_wq+_$VERSION.zip ${CWD}/binaries/windows
+  else
+    cp tuflowfv_external_wq_$VERSION.zip ${CWD}/binaries/windows
+  fi
+
+  exit 0
+  #============================= End Windows build =============================
 fi
 
-while [ $# -gt 0 ] ; do
-  case $1 in
-    --debug)
-      export DEBUG=true
-      ;;
-    --fence)
-      export FENCE=true
-      ;;
-    --static)
-      export EXTERNAL_LIBS=static
-      ;;
-    --single)
-      export SINGLE=true
-      ;;
-    --no-ben)
-      export NO_BEN=true
-      ;;
-    --no-demo)
-      export NO_DEMO=true
-      ;;
-    --no-rip)
-      export NO_RIP=true
-      ;;
-    --no-dev)
-      export NO_DEV=true
-      ;;
-    *)
-      ;;
-  esac
-  shift
-done
-
-
-export MAKE=make
 if [ "$OSTYPE" = "FreeBSD" ] ; then
   if [ "$FC" = "" ] ; then
     export FC=flang
   fi
+  export CC=clang
   export MAKE=gmake
-fi
-
-if [ "$FC" = "" ] ; then
-  export FC=ifx
-fi
-
-if [ "$FC" = "ifx" ] ; then
-  if [ "$OSTYPE" = "Msys" ] ; then
-    export PATH="$PATH:/c/Program Files (x86)/Intel/oneAPI/compiler/latest/windows/bin/intel64"
-  else
-    export start_sh="$(ps -p "$$" -o  command= | awk '{print $1}')" ;
-    # ifx config scripts wont work with /bin/sh
-    # so we restart using bash
-    if [ "$start_sh" = "/bin/sh" ] ; then
-      /bin/bash $0
-      exit $?
-    fi
-
-    # different releases put setup script in different places
-    if [ -f /opt/intel/setvars.sh ] ; then
-      . /opt/intel/setvars.sh
-    elif [ -f /opt/intel/oneapi/setvars.sh ] ; then
-      ls /opt/intel/oneapi/
-      . /opt/intel/oneapi/setvars.sh
-    elif [ -f /opt/intel/bin/compilervars.sh ] ; then
-      . /opt/intel/bin/compilervars.sh intel64
-    fi
-
-    which ${FC} > /dev/null 2>&1
-    if [ $? != 0 ] ; then
-       echo ${FC} compiler requested, but not found
-       exit 1
-    fi
+else
+  if [ "$FC" = "" ] ; then
+    export FC=ifort
   fi
+  export CC=gcc
+  export MAKE=make
 fi
 
 export F77=$FC
 export F90=$FC
 export F95=$FC
 
-export CURDIR=`pwd`
-export AEDFVDIR=${CURDIR}/libaed-fv
-if [ ! -d ${AEDFVDIR} ] ; then
+. ${CWD}/build_env.inc
+. ${CWD}/build_aedlibs.inc
+
+if [ ! -d ${CURDIR} ] ; then
   echo no libaed-fv directory?
   exit 1
 fi
 
-echo build libaed-water
-cd  ${CURDIR}/libaed-water
-${MAKE} || exit 1
-PARAMS=""
-if [ ! -d ${CURDIR}/libaed-benthic ] ; then NO_BEN=true ; fi
-if [ "${NO_BEN}" != "true" ] ; then
-  echo build libaed-benthic
-  cd  ${CURDIR}/libaed-benthic
-  ${MAKE} || exit 1
-  export DAEDBENDIR=`pwd`
-  echo BEN = $DAEDBENDIR
-  PARAMS="${PARAMS} AEDBENDIR=${DAEDBENDIR}"
-fi
-if [ ! -d ${CURDIR}/libaed-riparian ] ; then NO_RIP=true ; fi
-if [ "${NO_RIP}" != "true" ] ; then
-  echo build libaed-riparian
-  cd  ${CURDIR}/libaed-riparian
-  ${MAKE} || exit 1
-  export DAEDRIPDIR=`pwd`
-  echo RIP = $DAEDRIPDIR
-  PARAMS="${PARAMS} AEDRIPDIR=${DAEDRIPDIR}"
-fi
-if [ ! -d ${CURDIR}/libaed-demo ] ; then NO_DEMO=true ; fi
-if [ "${NO_DEMO}" != "true" ] ; then
-  echo build libaed-demo
-  cd  ${CURDIR}/libaed-demo
-  ${MAKE} || exit 1
-  export DAEDDMODIR=`pwd`
-  echo DMO = $DAEDDMODIR
-  PARAMS="${PARAMS} AEDDMODIR=${DAEDDMODIR}"
-fi
-if [ ! -d ${CURDIR}/libaed-dev ] ; then NO_DEV=true ; fi
-if [ "${NO_DEV}" != "true" ] ; then
-  echo build libaed-dev
-  cd  ${CURDIR}/libaed-dev
-  ${MAKE} || exit 1
-  export DAEDDEVDIR=`pwd`
-  echo DEV = $DAEDDEVDIR
-  PARAMS="${PARAMS} AEDDEVDIR=${DAEDDEVDIR}"
-fi
-
 echo build tfv_wq
-if [ -f ${AEDFVDIR}/obj/aed_external.o ] ; then
-  /bin/rm ${AEDFVDIR}/obj/aed_external.o
+if [ -f ${CURDIR}/obj/aed_external.o ] ;  then
+  /bin/rm ${CURDIR}/obj/aed_external.o
 fi
-${MAKE} -C ${AEDFVDIR} ${PARAMS} || exit 1
 
-#ISODATE=`date +%Y%m%d`
-#if [ "$PRECISION" = "1" ] ; then
-#   if [ "$SINGLE" = "true" ] ; then
-#     S='_ss'
-#   else
-#     S='_sd'
-#   fi
-#else
-#   S='_dd'
-#fi
-#if [ "$DEBUG" = "true" ] ; then
-#   D='_d'
-#else
-#   D=''
-#fi
-#
-#if [ "$OSTYPE" = "Linux" ] ; then
-#  if [ $(lsb_release -is) = Ubuntu ] ; then
-#    T=_u
-#  else
-#    T=_r
-#  fi
-#fi
-#EXTN="_$ISODATE$T$S$D"
-LFV_VERS=`grep FV_AED_VERS ${AEDFVDIR}/src/fv_aed.F90 | grep define | cut -f2 -d\"`
+export AEDFVDIR=${CURDIR}
+${MAKE} -C ${CURDIR} AEDWATDIR=${DAEDWATDIR} \
+                     AEDBENDIR=${DAEDBENDIR} \
+                     AEDDMODIR=${DAEDDMODIR} \
+                     AEDRIPDIR=${DAEDRIPDIR} \
+                     AEDLGTDIR=${DAEDLGTDIR} \
+                     AEDDEVDIR=${DAEDDEVDIR} \
+                     AEDAPIDIR=${DAEDAPIDIR} \
+                     PLOTDIR=../libplot \
+                     UTILDIR=../libutil || exit 1
 
 cd ${CURDIR}
+get_commit_id >> ${CWD}/cur_state.log
+
+ISODATE=`date +%Y%m%d`
+cd ${CWD}
+
+# Update versions in resource files
+export VERSION=`grep FV_AED_VERS ${CURDIR}/src/fv_aed.F90 | head -1 | cut -f2 -d\"`
+if [ "$VERSION" = "" ] ; then
+  export VERSION=`grep FV_AED_API_VERS ${CURDIR}/src/fv_aed.F90 | head -1 | cut -f2 -d\"`
+fi
+cd ${CURDIR}/win
+${CURDIR}/vers.sh $VERSION
+if [ "$OSTYPE" = "Linux" ] ; then
+  cd ${CURDIR}
+  VERSDEB=`head -1 debian/changelog | cut -f2 -d\( | cut -f1 -d-`
+  echo debian version $VERSDEB
+  if [ "$VERSION" != "$VERSDEB" ] ; then
+    echo updating debian version from ${VERSDEB} to ${VERSION}
+    dch --newversion ${VERSION}-0 "new version ${VERSION}"
+  fi
+fi
+cd ${CWD}
 
 if [ "$EXTERNAL_LIBS" = "shared" ] ; then
   if [ "$OSTYPE" = "Darwin" ] ; then
@@ -194,17 +208,47 @@ if [ "$EXTERNAL_LIBS" = "shared" ] ; then
     BINPATH="binaries/macos/${MOSNAME}"
   fi
   if [ "$OSTYPE" = "Linux" ] ; then
-    if [ $(lsb_release -is) = Ubuntu ] ; then
-      BINPATH="binaries/ubuntu/$(lsb_release -rs)"
+    RELEASE=`lsb_release -is | tr '[A-Z]' '[a-z]'`
+    if [ $RELEASE = ubuntu ] || [ $RELEASE = debian ] ; then
+      BINPATH=binaries/$RELEASE/$(lsb_release -rs)
     fi
+    cd ${CURDIR}
+    if [ -d debian/libaed-tfv ] ; then
+      rm -r debian/libaed-tfv
+    fi
+    fakeroot make -f debian/rules binary || exit 1
+    cd ${CWD}
   fi
 
-  if [ ! -d ${BINPATH} ] ; then
-     mkdir -p ${BINPATH}
+  if [ ! -d ${CWD}/${BINPATH} ] ; then
+    mkdir -p ${CWD}/${BINPATH}
   fi
 
-  cd ${CURDIR}/libaed-fv/lib
-  tar czf ${CURDIR}/${BINPATH}/libtuflowfv_external_wq_${LFV_VERS}.tar.gz libtuflowfv_external_wq.*
+  if [ -d ${CURDIR}/lib ] ; then
+    cd ${CURDIR}/lib
+    if [ "$WITH_AED_PLUS" = "true" ] ; then
+      tar czf ${CWD}/${BINPATH}/libtuflowfv_external_wq+_${VERSION}.tar.gz libtuflowfv_external_wq.*
+    else
+      tar czf ${CWD}/${BINPATH}/libtuflowfv_external_wq_${VERSION}.tar.gz libtuflowfv_external_wq.*
+    fi
+    if [ "$OSTYPE" = "Linux" ] ; then
+      mv ${CWD}/libaed-tfv_*_amd64.deb ${CWD}/${BINPATH}
+      if [ -d ${CWD}/${BINPATH}/libaed_fv_latest ] ; then
+        rm -r ${CWD}/${BINPATH}/libaed_fv_latest
+      fi
+      mkdir ${CWD}/${BINPATH}/libaed_fv_latest
+      cd ${CURDIR}/debian/libaed-tfv/usr/local/lib/
+      tar cf - libaed-tfv | (cd ${CWD}/${BINPATH}/libaed_fv_latest; tar xf -)
+      export MYPATH=${CWD}/${BINPATH}/libaed_fv_latest/libaed-tfv
+      cd ${CURDIR}
+      bin/mk_tuflowfv_libaed > ${CWD}/${BINPATH}/libaed_fv_latest/tuflowfv_libaed
+      chmod +x ${CWD}/${BINPATH}/libaed_fv_latest/tuflowfv_libaed
+      cd ${CWD}
+    fi
+  else
+    echo \*\*\* packaging failed no directory ${CURDIR}/lib
+  fi
 fi
+/bin/rm cur_state.log
 
 exit 0

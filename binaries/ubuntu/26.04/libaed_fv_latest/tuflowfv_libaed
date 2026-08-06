@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export AED_DIR=$(dirname $(realpath "$0"))
+EXTRA_PATH=${EXTRA_PATH:-/usr/local/lib}/tuflowfv-2025.2
+export LD_LIBRARY_PATH=$AED_DIR/libaed-tfv:$EXTRA_PATH:$LD_LIBRARY_PATH
+ulimit -s unlimited > /dev/null
+/usr/local/bin/tuflowfv-2025.2/tuflowfv-2025.2 "$@"

@@ -67,6 +67,57 @@ jobs:
            git commit -m "Update Ubuntu 24.04 binaries"
            git push
 
+  ubuntu26:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-26.04
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v7
+
+      - name: Checkout submodules
+        run: |
+           git submodule update --init --recursive
+           git config --global user.name "github-actions[bot]"
+           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+           git pull
+
+      # Runs a single command using the runners shell
+      - name: Getting packages
+        run:  | 
+           sudo apt-get update -y
+           sudo apt-get install devscripts
+           sudo apt-get install debhelper
+
+      - name: Install compiler
+        run: |
+         curl -SL --output intel-fortran-compiler-2026.1.1.19_offline.sh https://registrationcenter-download.intel.com/akdlm/IRC_NAS/09a1aab3-8441-4a4e-a243-1c1c8e15598c/intel-fortran-compiler-2026.1.1.19_offline.sh
+           mkdir tmp
+           mkdir -p /opt/intel
+           /bin/sh intel-fortran-compiler-2026.1.1.19_offline.sh -s -f tmp -a --silent --cli --action install --install-dir /opt/intel/oneapi --eula accept
+           # remove the very big installer
+           rm -rf tmp intel-fortran-compiler-2026.1.1.19_offline.sh
+
+      # Runs a set of commands using the runners shell
+      - name: compile libaed-fv
+        run: | 
+           cd $GITHUB_WORKSPACE/fv-source
+           ./build_aed-fv.sh --ifx
+           mkdir -p $GITHUB_WORKSPACE/binaries/ubuntu/26.04
+           cp -r $GITHUB_WORKSPACE/fv-source/binaries/ubuntu/26.04/* $GITHUB_WORKSPACE/binaries/ubuntu/26.04/.
+
+      - name: update binaries and push to remote
+        run: |
+           git config --global user.name "github-actions[bot]"
+           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+           git pull
+           git add -A
+           git commit -m "Update Ubuntu 24.04 binaries"
+           git push
+
   windows:
     # The type of runner that the job will run on
     runs-on: windows-latest

@@ -142,7 +142,7 @@ if [ "$OSTYPE" = "FreeBSD" ] ; then
   export MAKE=gmake
 else
   if [ "$FC" = "" ] ; then
-    export FC=ifort
+    export FC=ifx
   fi
   export CC=gcc
   export MAKE=make
